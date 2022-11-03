@@ -2,10 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const authRoutes = require('./routes/authRoutes');
+const routes = require('./routes');
 const cookieParser = require('cookie-parser');
-const { requireAuth, checkUser } = require('./middleware/authMiddleware');
-const quizRoutes = require('./routes/quizRoutes');
 
 const app = express();
 app.use(cors());
@@ -28,10 +26,10 @@ mongoose
   .catch(err => console.log('Cannot connect to DB ', err));
 
 // routes
-app.get('*', checkUser);
-app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'));
-app.use(authRoutes);
-app.use('/quiz', quizRoutes);
+app.use('/api', routes);
+app.get('/healthcheck', (req, res) => {
+  return res.status(200).send('API is working');
+});
 
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);

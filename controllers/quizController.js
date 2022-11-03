@@ -1,14 +1,6 @@
 const QuestionModel = require('../models/question');
 const QuizModel = require('../models/quiz');
-
-const calculateQuizScore = id => {
-  let score = 0;
-  const popluatedQuiz = QuizModel.findById(id).populate({
-    path: 'quiz_questions',
-  });
-
-  return score;
-};
+const { calculateQuizScore } = require('../utils/quiz');
 
 const createQuiz = async (req, res) => {
   try {
@@ -49,13 +41,9 @@ const getQuiz = async (req, res) => {
 
 const submitQuiz = async (req, res) => {
   try {
-    const { id } = req.params;
+    const score = calculateQuizScore(req.body);
 
-    const popluatedQuiz = await QuizModel.findById(id).populate({
-      path: 'quiz_questions',
-    });
-
-    res.status(200).json(popluatedQuiz);
+    res.status(200).json(`You scored: ${score}`);
   } catch (err) {
     res.status(400).json({
       message: err,
