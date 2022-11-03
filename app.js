@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
 const cookieParser = require('cookie-parser');
 const { requireAuth, checkUser } = require('./middleware/authMiddleware');
+const quizRoutes = require('./routes/quizRoutes');
 
 const app = express();
 app.use(cors());
@@ -30,6 +31,7 @@ mongoose
 app.get('*', checkUser);
 app.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'));
 app.use(authRoutes);
+app.use('/quiz', quizRoutes);
 
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
