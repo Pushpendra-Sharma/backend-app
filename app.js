@@ -27,7 +27,8 @@ mongoose
 
 // routes
 app.use('/api', routes);
-app.get('/healthcheck', (req, res) => {
+
+app.get('/api/healthcheck', (req, res) => {
   return res.status(200).send('API is working');
 });
 

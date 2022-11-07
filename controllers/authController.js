@@ -8,10 +8,10 @@ const signup = async (req, res) => {
     const user = await User.create({ email, password });
     // const token = createAuthToken(user._id);
     // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-    res.status(201).json({
+    res.set('Authorization', token).status(201).json({
       success: true,
       message: 'Signup successfull.',
-      data: { user: user._doc },
+      userId: user._id,
     });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
@@ -33,12 +33,13 @@ const login = async (req, res) => {
       throw new Error('Incorrect password.');
     }
 
-    const token = createAuthToken(user._doc);
+    const token = 'Bearer ' + createAuthToken(user._doc);
 
-    res.status(200).json({
+    res.set('Authorization', token).status(200).json({
       success: true,
       message: 'User logged in successfully',
-      data: { user, token },
+      userId: user._id,
+      token,
     });
   } catch (err) {
     res.status(400).json({ success: false, error: err.message });
